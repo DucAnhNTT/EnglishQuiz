@@ -38,26 +38,26 @@ public class UtilsController implements Initializable {
     @FXML
     private TextField tf_username;
 
-    public void changeScene(ActionEvent event,String fxmlFile, String username) throws IOException {
-        Parent root = null;
+//     public void changeScene(ActionEvent event,String fxmlFile, String username) throws IOException {
+//         Parent root = null;
         
-        if (username != null) {
-            try {
-                FXMLLoader loader = new FXMLLoader(UtilsController.class.getResource(fxmlFile));
-                root = loader.load();
-                Logg
-                root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+//         if (username != null) {
+//             try {
+//                 FXMLLoader loader = new FXMLLoader(UtilsController.class.getResource(fxmlFile));
+//                 root = loader.load();
+//                 Logg
+//                 root = FXMLLoader.load(getClass().getResource("Main.fxml"));
 
-                LoggedInController loggedincontroller
-                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.show();
-            } catch (Exception e) {
-            }
-        }
+//                 LoggedInController loggedincontroller
+//                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+//                 scene = new Scene(root);
+//                 stage.setScene(scene);
+//                 stage.show();
+//             } catch (Exception e) {
+//             }
+//         }
 
-    }
+//     }
 
     public void switchToLoginMain(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));
