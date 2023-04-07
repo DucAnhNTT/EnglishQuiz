@@ -14,14 +14,24 @@ import javafx.scene.control.Label;
  *
  * @author Bee
  */
-public class Main{
+public class MainScreen implements Initializable{
 
+    public MainScreen() {
+    }
+    
+    
+    
     @FXML
     private Label lb_welcome;
 
     public void welcome_User(String username) {
         lb_welcome.setText("Welcome " + username + "!");
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+ 
     }
 
 }

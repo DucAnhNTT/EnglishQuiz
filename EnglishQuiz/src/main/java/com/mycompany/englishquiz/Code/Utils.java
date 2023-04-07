@@ -5,6 +5,7 @@
 package com.mycompany.englishquiz.Code;
 
 import java.text.SimpleDateFormat;
+import java.util.Scanner;
 
 /**
  *
@@ -12,6 +13,5 @@ import java.text.SimpleDateFormat;
  */
 public class Utils {
     public static final SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-    
-            
+    public static Scanner sc = new Scanner(System.in);          
 }
