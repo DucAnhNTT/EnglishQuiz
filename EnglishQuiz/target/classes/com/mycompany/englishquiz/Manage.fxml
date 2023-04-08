@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="scenePane" prefHeight="464.0" prefWidth="600.0" style="-fx-background-color: #2D3447;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.EnglishQuiz.UtilsController">
+   <children>
+      <Label alignment="CENTER" layoutX="25.0" layoutY="30.0" prefHeight="45.0" prefWidth="553.0" stylesheets="@FXMLCSS.css" text="Your info:" textAlignment="CENTER" textFill="#fdfdfd">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Button layoutX="24.0" layoutY="408.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Back" textFill="#a0a2ab">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="187.0" layoutY="104.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="229.0" text="Your result">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="187.0" layoutY="199.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="229.0" text="Modify your info">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="187.0" layoutY="293.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="229.0" text="Delete your account!" textFill="#d40a0a">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

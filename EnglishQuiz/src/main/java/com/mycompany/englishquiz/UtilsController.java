@@ -1,11 +1,16 @@
 package com.mycompany.EnglishQuiz;
 
-import com.mycompany.englishquiz.MainScreen;
+import com.mycompany.englishquiz.SqliteConnection;
+import com.mycompany.englishquiz.UserDAO;
+import com.mycompany.englishquiz.Code.User;
+import com.mycompany.englishquiz.Code.Utils;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -46,23 +51,6 @@ public class UtilsController implements Initializable {
     @FXML
     private Label lb_loginMessage;
 
-//sign up
-    @FXML
-    private TextField tf_SU_password;
-    @FXML
-    private TextField tf_SU_username;
-    @FXML
-    private DatePicker date_user;
-    @FXML
-    private TextField tf_address;
-    @FXML
-    private RadioButton rd_SUMale;
-    @FXML
-    private RadioButton rd_SUFemale;
-    @FXML
-    private Label lb_signUpMessage;
-    
-
     public void logginButtonOnAction(ActionEvent e) {
         if (tf_username.getText().isBlank() == false && tf_password.getText().isBlank() == false) {
             lb_loginMessage.setText("You try to login!");
@@ -71,44 +59,16 @@ public class UtilsController implements Initializable {
         }
     }
 
-    public void signUpButtonOnAction(ActionEvent e) {
-        if (!tf_SU_username.getText().isBlank() && !tf_SU_password.getText().isBlank()
-                && date_user.getValue() != null && !tf_address.getText().isBlank()
-                && (rd_SUMale.isSelected() || rd_SUFemale.isSelected())) {
-            //xu li sign up
-            lb_signUpMessage.setText("Nice");
-        } else {
-            lb_signUpMessage.setText("Please fill all value");
-        }
+
+
+    public void switchToManage(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("Manage.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
 
-// xu li login
-//    public void changeScene(ActionEvent event, String username) throws IOException {
-//        if (username != null) {
-//            try {
-//                FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
-//                Parent root = loader.load();
-//                MainScreen controller = loader.getController();
-//                controller.welcome_User(username);
-//                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//                scene = new Scene(root);
-//                stage.setScene(scene);
-//                stage.show();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-//            try {
-//                root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));
-//                stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//                scene = new Scene(root);
-//                stage.setScene(scene);
-//                stage.show();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } 
-//        }
-//    }
     public void switchToLoginMain(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -131,6 +91,23 @@ public class UtilsController implements Initializable {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void backToLoginWithAlert(ActionEvent event) throws IOException {
+
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Back to login!?");
+        alert.setHeaderText("You're about to back to Login");
+        alert.setContentText("Do you want to save your result!?: ");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        }
+
     }
 
     public void logout(ActionEvent event) {

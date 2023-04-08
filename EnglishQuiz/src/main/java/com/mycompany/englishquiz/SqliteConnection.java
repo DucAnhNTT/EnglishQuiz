@@ -11,7 +11,7 @@ public class SqliteConnection {
     public Connection connect() {
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:users.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:src\\main\\resources\\Database\\Users.db");
             System.out.println("Connection to SQLite database established.");
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e.getMessage());
@@ -30,3 +30,4 @@ public class SqliteConnection {
         }
     }
 }
+

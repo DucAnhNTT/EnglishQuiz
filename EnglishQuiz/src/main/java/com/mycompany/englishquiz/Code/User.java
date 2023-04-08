@@ -1,45 +1,57 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Project/Maven2/JavaApp/src/main/java/${packagePath}/${mainClassName}.java to edit this template
- */
-
 package com.mycompany.englishquiz.Code;
 
+import com.mycompany.englishquiz.Code.Utils;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
-/**
- *
- * @author Bee
- */
 public class User {
+
+    private int id;
     private String hoTen;
     private String queQuan;
-    private boolean gioiTinh;
+    private String gioiTinh;
     private Date ngaySinh;
-    private Calendar ngayGiaNhap;
-    
-    {
-        ngayGiaNhap = new GregorianCalendar();
-    }
+    private String ngayGiaNhap;
 
-    public User(String hoTen, String queQuan, boolean gioiTinh, String ngaySinh) throws ParseException {
+    public User(String hoTen, String queQuan, String gioiTinh, String ngaySinhStr) throws ParseException {
         this.hoTen = hoTen;
         this.queQuan = queQuan;
         this.gioiTinh = gioiTinh;
-        this.ngaySinh = Utils.f.parse(ngaySinh);
+        if (!ngaySinhStr.isEmpty()) {
+            try {
+                this.ngaySinh = Utils.f.parse(ngaySinhStr);
+            } catch (ParseException e) {
+                throw new ParseException("Invalid date format. Please enter date in yyyy-MM-dd format.", 0);
+            }
+        }
     }
 
-    public User(String hoTen, String queQuan, boolean gioiTinh, Date ngaySinh) {
+    public User(String hoTen, String queQuan, String gioiTinh, String ngaySinh, String ngayGiaNhap) throws ParseException {
         this.hoTen = hoTen;
         this.queQuan = queQuan;
         this.gioiTinh = gioiTinh;
-        this.ngaySinh = ngaySinh;
+        try {
+            this.ngaySinh = Utils.f.parse(ngaySinh);
+        } catch (ParseException e) {
+            throw new ParseException("Invalid date format. Please enter date in dd/MM/yyyy format.", 0);
+        }
+        this.ngayGiaNhap = ngayGiaNhap;
     }
-    
-    
+
+    // Getter and setter methods for the instance variables
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
     /**
      * @return the hoTen
@@ -72,14 +84,14 @@ public class User {
     /**
      * @return the gioiTinh
      */
-    public boolean isGioiTinh() {
+    public String getGioiTinh() {
         return gioiTinh;
     }
 
     /**
      * @param gioiTinh the gioiTinh to set
      */
-    public void setGioiTinh(boolean gioiTinh) {
+    public void setGioiTinh(String gioiTinh) {
         this.gioiTinh = gioiTinh;
     }
 
@@ -100,15 +112,14 @@ public class User {
     /**
      * @return the ngayGiaNhap
      */
-    public Calendar getNgayGiaNhap() {
+    public String getNgayGiaNhap() {
         return ngayGiaNhap;
     }
 
     /**
      * @param ngayGiaNhap the ngayGiaNhap to set
      */
-    public void setNgayGiaNhap(Calendar ngayGiaNhap) {
+    public void setNgayGiaNhap(String ngayGiaNhap) {
         this.ngayGiaNhap = ngayGiaNhap;
     }
-    
 }
