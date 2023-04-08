@@ -23,6 +23,7 @@ public class UserDAO {
             Statement statement = connection.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS Users (\n"
                     + "    hoTen TEXT PRIMARY KEY,\n"
+                    + "    matKhau TEXT NOT NULL,\n"
                     + "    queQuan TEXT NOT NULL,\n"
                     + "    gioiTinh TEXT NOT NULL,\n"
                     + "    ngaySinh TEXT NOT NULL,\n"
@@ -36,13 +37,14 @@ public class UserDAO {
     }
 
     public void insertUser(User user) throws SQLException {
-        String sql = "INSERT INTO Users (hoTen, queQuan, gioiTinh, ngaySinh, ngayGiaNhap) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, user.getHoTen());
-        statement.setString(2, user.getQueQuan());
-        statement.setString(3, user.getGioiTinh());
-        statement.setString(4, Utils.f.format(user.getNgaySinh()));
-        statement.setString(5, Utils.f.format(new java.util.Date()));
+        statement.setString(2, user.getMatKhau());
+        statement.setString(3, user.getQueQuan());
+        statement.setString(4, user.getGioiTinh());
+        statement.setString(5, Utils.f.format(user.getNgaySinh()));
+        statement.setString(6, Utils.f.format(new java.util.Date()));
         statement.executeUpdate();
         statement.close();
     }
@@ -54,11 +56,12 @@ public class UserDAO {
         ResultSet result = statement.executeQuery();
         User user = null;
         if (result.next()) {
+            String matKhau = result.getString("matKhau");
             String queQuan = result.getString("queQuan");
             String gioiTinh = result.getString("gioiTinh");
             java.util.Date ngaySinh = result.getDate("ngaySinh");
             String ngayGiaNhap = result.getString("ngayGiaNhap");
-            user = new User(hoTen, queQuan, gioiTinh, Utils.f.format(ngaySinh), ngayGiaNhap);
+            user = new User(hoTen, matKhau, queQuan, gioiTinh, Utils.f.format(ngaySinh), ngayGiaNhap);
         }
         result.close();
         statement.close();
@@ -66,12 +69,13 @@ public class UserDAO {
     }
 
     public void updateUser(User user) throws SQLException {
-        String sql = "UPDATE Users SET queQuan = ?, gioiTinh = ?, ngaySinh = ? WHERE hoTen = ?";
+        String sql = "UPDATE Users SET matKhau = ?, queQuan = ?, gioiTinh = ?, ngaySinh = ? WHERE hoTen = ?";
         PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, user.getQueQuan());
-        statement.setString(2, user.getGioiTinh());
-        statement.setString(3, Utils.f.format(user.getNgaySinh()));
-        statement.setString(4, user.getHoTen());
+        statement.setString(1, user.getMatKhau());
+        statement.setString(2, user.getQueQuan());
+        statement.setString(3, user.getGioiTinh());
+        statement.setString(4, Utils.f.format(user.getNgaySinh()));
+        statement.setString(5, user.getHoTen());
         statement.executeUpdate();
         statement.close();
     }

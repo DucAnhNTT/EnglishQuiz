@@ -1,42 +1,39 @@
 package com.mycompany.englishquiz.Code;
 
-import com.mycompany.englishquiz.Code.Utils;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class User {
 
     private int id;
     private String hoTen;
+    private String matKhau;
     private String queQuan;
     private String gioiTinh;
     private Date ngaySinh;
     private String ngayGiaNhap;
 
-    public User(String hoTen, String queQuan, String gioiTinh, String ngaySinhStr) throws ParseException {
-        this.hoTen = hoTen;
-        this.queQuan = queQuan;
-        this.gioiTinh = gioiTinh;
-        if (!ngaySinhStr.isEmpty()) {
-            try {
-                this.ngaySinh = Utils.f.parse(ngaySinhStr);
-            } catch (ParseException e) {
-                throw new ParseException("Invalid date format. Please enter date in yyyy-MM-dd format.", 0);
-            }
-        }
+ public User(String hoTen, String matKhau, String queQuan, String gioiTinh, String ngaySinhStr, String ngayGiaNhap) throws ParseException {
+    if (matKhau == null) {
+        throw new IllegalArgumentException("matKhau field cannot be null");
     }
-
-    public User(String hoTen, String queQuan, String gioiTinh, String ngaySinh, String ngayGiaNhap) throws ParseException {
-        this.hoTen = hoTen;
-        this.queQuan = queQuan;
-        this.gioiTinh = gioiTinh;
+    this.hoTen = hoTen;
+    this.matKhau = matKhau;
+    this.queQuan = queQuan;
+    this.gioiTinh = gioiTinh;
+    try {
+        this.ngaySinh = Utils.f.parse(ngaySinhStr);
+    } catch (ParseException e) {
+        // If the date is not in the format "yyyy-MM-dd", try parsing it as "dd/MM/yyyy"
         try {
-            this.ngaySinh = Utils.f.parse(ngaySinh);
-        } catch (ParseException e) {
-            throw new ParseException("Invalid date format. Please enter date in dd/MM/yyyy format.", 0);
+            this.ngaySinh = new SimpleDateFormat("dd/MM/yyyy").parse(ngaySinhStr);
+        } catch (ParseException ex) {
+            throw new ParseException("Invalid date format. Please enter date in yyyy-MM-dd or dd/MM/yyyy format.", 0);
         }
-        this.ngayGiaNhap = ngayGiaNhap;
     }
+    this.ngayGiaNhap = ngayGiaNhap;
+}
 
     // Getter and setter methods for the instance variables
     /**
@@ -121,5 +118,19 @@ public class User {
      */
     public void setNgayGiaNhap(String ngayGiaNhap) {
         this.ngayGiaNhap = ngayGiaNhap;
+    }
+
+    /**
+     * @return the matKhau
+     */
+    public String getMatKhau() {
+        return matKhau;
+    }
+
+    /**
+     * @param matKhau the matKhau to set
+     */
+    public void setMatKhau(String matKhau) {
+        this.matKhau = matKhau;
     }
 }

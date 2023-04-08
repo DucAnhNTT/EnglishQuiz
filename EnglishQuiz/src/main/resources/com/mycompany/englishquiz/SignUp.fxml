@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane  id="AnchorPane" fx:id="scenePane" prefHeight="464.0" prefWidth="606.0" style="-fx-background-color: #2D3447;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.englishquiz.SignUpController">
+<AnchorPane id="AnchorPane" fx:id="scenePane" prefHeight="497.0" prefWidth="606.0" style="-fx-background-color: #2D3447;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.englishquiz.SignUpController">
    <children>
       <TextField fx:id="tf_SU_username" layoutX="114.0" layoutY="23.0" prefHeight="43.0" prefWidth="379.0" promptText="Name (use this as username)">
          <font>
@@ -24,7 +24,7 @@
             <Font size="20.0" />
          </font>
       </PasswordField>
-      <Button layoutX="491.0" layoutY="396.0" mnemonicParsing="false" onAction="#signUpButtonOnAction" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;" text="Sign UP" textFill="#a0a2ab">
+      <Button layoutX="491.0" layoutY="439.0" mnemonicParsing="false" onAction="#signUpButtonOnAction" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;" text="Sign UP" textFill="#a0a2ab">
          <font>
             <Font size="18.0" />
          </font>
@@ -39,7 +39,7 @@
             <Image url="@../../../../resources/Images/pass.png" />
          </image>
       </ImageView>
-      <Button layoutX="16.0" layoutY="396.0" mnemonicParsing="false" onAction="#switchToLoginMain" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Back" textFill="#a0a2ab">
+      <Button layoutX="16.0" layoutY="439.0" mnemonicParsing="false" onAction="#switchToLoginMain" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Back" textFill="#a0a2ab">
          <font>
             <Font size="18.0" />
          </font>
@@ -78,7 +78,7 @@
             <Font size="20.0" />
          </font>
       </TextField>
-      <Label fx:id="lb_signUpMessage" alignment="CENTER" layoutX="172.0" layoutY="396.0" prefHeight="43.0" prefWidth="287.0" textAlignment="CENTER" textFill="#a0a2ab">
+      <Label fx:id="lb_signUpMessage" alignment="CENTER" layoutX="17.0" layoutY="363.0" prefHeight="73.0" prefWidth="577.0" textAlignment="CENTER" textFill="#a0a2ab">
          <font>
             <Font size="18.0" />
          </font>

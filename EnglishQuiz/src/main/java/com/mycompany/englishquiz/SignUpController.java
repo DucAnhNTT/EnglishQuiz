@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -28,7 +29,7 @@ public class SignUpController {
 
     // sign up
     @FXML
-    private TextField tf_SU_password;
+    private PasswordField tf_SU_password;
     @FXML
     private TextField tf_SU_username;
     @FXML
@@ -47,12 +48,13 @@ public class SignUpController {
             && !tf_address.getText().isBlank() && (rd_SUMale.isSelected() || rd_SUFemale.isSelected())) {
         // Create a new user object with the input values
         String hoTen = tf_SU_username.getText();
+        String matKhau = tf_SU_password.getText();
         String queQuan = tf_address.getText();
         String gioiTinh = rd_SUMale.isSelected() ? "Male" : "Female";
         LocalDate ngaySinh = date_user.getValue();
         String ngaySinhStr = ngaySinh != null ? ngaySinh.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
         String ngayGiaNhapStr = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        User user = new User(hoTen, queQuan, gioiTinh, ngaySinhStr, ngayGiaNhapStr);
+        User user = new User(hoTen, matKhau, queQuan, gioiTinh, ngaySinhStr, ngayGiaNhapStr);
 
         // Insert the user into the database
         SqliteConnection sqliteConnection = new SqliteConnection();

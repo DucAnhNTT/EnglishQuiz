@@ -4,40 +4,47 @@ import static com.mycompany.englishquiz.Code.Utils.DATABASE_URL;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class DemoCode {
 
 public static void insertOrUpdateUser(User user) {
-    String sql = "UPDATE Users SET queQuan=?, gioiTinh=?, ngaySinh=?, ngayGiaNhap=? WHERE hoTen=?";
+    String sql = "UPDATE Users SET matKhau = ?, queQuan=?, gioiTinh=?, ngaySinh=?, ngayGiaNhap=? WHERE hoTen=?";
 
-    try (Connection conn = DriverManager.getConnection(DATABASE_URL);
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    try (Connection conn = DriverManager.getConnection(DATABASE_URL); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        // check if the matKhau field is null
+        if (user.getMatKhau() == null) {
+            throw new IllegalArgumentException("matKhau field cannot be null");
+        }
 
         // set the values of the parameters for the prepared statement
         pstmt.setString(1, user.getQueQuan());
         pstmt.setString(2, user.getGioiTinh());
 
-        // format the LocalDate objects as Strings using SimpleDateFormat
+        // convert the ngaySinh and ngayGiaNhap strings to LocalDate objects
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String ngaySinhStr = dateFormat.format(user.getNgaySinh());
-        String ngayGiaNhapStr = dateFormat.format(user.getNgayGiaNhap());
+        LocalDate ngaySinh = LocalDate.parse(dateFormat.format(user.getNgaySinh()), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate ngayGiaNhap = LocalDate.parse(user.getNgayGiaNhap(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
-        pstmt.setString(3, ngaySinhStr);
-        pstmt.setString(4, ngayGiaNhapStr);
+        pstmt.setString(3, dateFormat.format(Date.from(ngaySinh.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+        pstmt.setString(4, dateFormat.format(Date.from(ngayGiaNhap.atStartOfDay(ZoneId.systemDefault()).toInstant())));
         pstmt.setString(5, user.getHoTen());
 
         // execute the prepared statement
         int rowsUpdated = pstmt.executeUpdate();
         if (rowsUpdated == 0) {
             // if no rows were updated, the user does not exist, so insert a new user
-            sql = "INSERT INTO Users (hoTen, queQuan, gioiTinh, ngaySinh, ngayGiaNhap) VALUES (?, ?, ?, ?, ?)";
+            sql = "INSERT INTO Users (hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pstmt2 = conn.prepareStatement(sql)) {
                 pstmt2.setString(1, user.getHoTen());
-                pstmt2.setString(2, user.getQueQuan());
-                pstmt2.setString(3, user.getGioiTinh());
-                pstmt2.setString(4, ngaySinhStr);
-                pstmt2.setString(5, ngayGiaNhapStr);
+                pstmt2.setString(2, user.getMatKhau());
+                pstmt2.setString(3, user.getQueQuan());
+                pstmt2.setString(4, user.getGioiTinh());
+                pstmt2.setString(5, dateFormat.format(Date.from(ngaySinh.atStartOfDay(ZoneId.systemDefault()).toInstant())));
+                pstmt2.setString(6, dateFormat.format(Date.from(ngayGiaNhap.atStartOfDay(ZoneId.systemDefault()).toInstant())));
                 rowsUpdated = pstmt2.executeUpdate();
                 if (rowsUpdated > 0) {
                     System.out.println("A new user has been inserted.");
@@ -60,12 +67,13 @@ public static void insertOrUpdateUser(User user) {
             // iterate over the result set and print each row
             while (rs.next()) {
                 String hoTen = rs.getString("hoTen");
+                String matKhau = rs.getString("matKhau");
                 String queQuan = rs.getString("queQuan");
                 String gioiTinh = rs.getString("gioiTinh");
                 String ngaySinh = rs.getString("ngaySinh");
                 String ngayGiaNhap = rs.getString("ngayGiaNhap");
 
-                System.out.println(hoTen + " \t " + queQuan + " \t " + gioiTinh + " \t " + ngaySinh + " \t " + ngayGiaNhap);
+                System.out.println(hoTen + " \t " + matKhau + " \t " + queQuan + " \t " + gioiTinh + " \t " + ngaySinh + " \t " + ngayGiaNhap);
             }
 
         } catch (SQLException e) {
@@ -74,6 +82,12 @@ public static void insertOrUpdateUser(User user) {
     }
 
     public static void main(String[] args) throws ParseException {
+        // create a new user
+        User user = new User("John Doe", "password123", "123 Main St", "Male", "01/01/1990", "01/01/2021");
+
+        // insert or update the user in the database
+        insertOrUpdateUser(user);
+
         // print the contents of the User table
         System.out.println("User table:");
         printUsers();
