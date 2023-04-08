@@ -14,4 +14,6 @@ import java.util.Scanner;
 public class Utils {
     public static final SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
     public static Scanner sc = new Scanner(System.in);          
+    public static final String DATABASE_URL = "jdbc:sqlite:users.db"; // replace with your database path
+
 }

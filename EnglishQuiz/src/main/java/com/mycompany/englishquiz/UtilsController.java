@@ -61,6 +61,7 @@ public class UtilsController implements Initializable {
     private RadioButton rd_SUFemale;
     @FXML
     private Label lb_signUpMessage;
+    
 
     public void logginButtonOnAction(ActionEvent e) {
         if (tf_username.getText().isBlank() == false && tf_password.getText().isBlank() == false) {
@@ -75,7 +76,7 @@ public class UtilsController implements Initializable {
                 && date_user.getValue() != null && !tf_address.getText().isBlank()
                 && (rd_SUMale.isSelected() || rd_SUFemale.isSelected())) {
             //xu li sign up
-            
+            lb_signUpMessage.setText("Nice");
         } else {
             lb_signUpMessage.setText("Please fill all value");
         }

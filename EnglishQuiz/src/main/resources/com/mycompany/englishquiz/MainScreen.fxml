@@ -6,12 +6,26 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="AnchorPane" fx:id="scenePane" prefHeight="464.0" prefWidth="600.0" style="-fx-background-color: #2D3447;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.EnglishQuiz.UtilsController">
-   <children>
-      <Button layoutX="90.0" layoutY="187.0" mnemonicParsing="false" onAction="#switchToSignUp" prefHeight="140.0" prefWidth="189.0" text="Button" />
-      <Label fx:id="lb_welcome" alignment="CENTER" layoutX="140.0" layoutY="30.0" prefHeight="45.0" prefWidth="332.0" text="Welcome" textAlignment="CENTER" textFill="#fdfdfd">
+    <children>
+        <Label fx:id="lb_welcome" alignment="CENTER" layoutX="25.0" layoutY="30.0" prefHeight="45.0" prefWidth="553.0" stylesheets="@FXMLCSS.css" text="Welcome" textAlignment="CENTER" textFill="#fdfdfd">
+            <font>
+                <Font size="30.0" />
+            </font>
+        </Label>
+      <Button layoutX="187.0" layoutY="103.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="229.0" text="Practice">
          <font>
-            <Font size="30.0" />
+            <Font size="20.0" />
          </font>
-      </Label>
-   </children>
+      </Button>
+      <Button layoutX="187.0" layoutY="198.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="229.0" text="Take a test!">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button layoutX="185.0" layoutY="292.0" mnemonicParsing="false" prefHeight="67.0" prefWidth="229.0" text="Manage">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+    </children>
 </AnchorPane>
