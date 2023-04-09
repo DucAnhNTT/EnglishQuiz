@@ -8,6 +8,8 @@ import java.text.ParseException;
 import com.mycompany.englishquiz.Code.User;
 import com.mycompany.englishquiz.Code.Utils;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UserDAO {
 
@@ -59,7 +61,8 @@ public class UserDAO {
             String matKhau = result.getString("matKhau");
             String queQuan = result.getString("queQuan");
             String gioiTinh = result.getString("gioiTinh");
-            java.util.Date ngaySinh = result.getDate("ngaySinh");
+            String ngaySinhString = result.getString("ngaySinh");
+            Date ngaySinh = new SimpleDateFormat("dd/MM/yyyy").parse(ngaySinhString);
             String ngayGiaNhap = result.getString("ngayGiaNhap");
             user = new User(hoTen, matKhau, queQuan, gioiTinh, Utils.f.format(ngaySinh), ngayGiaNhap);
         }

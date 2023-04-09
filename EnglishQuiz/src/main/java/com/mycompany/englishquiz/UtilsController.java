@@ -6,6 +6,7 @@ import com.mycompany.englishquiz.Code.User;
 import com.mycompany.englishquiz.Code.Utils;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -51,15 +52,35 @@ public class UtilsController implements Initializable {
     @FXML
     private Label lb_loginMessage;
 
-    public void logginButtonOnAction(ActionEvent e) {
-        if (tf_username.getText().isBlank() == false && tf_password.getText().isBlank() == false) {
-            lb_loginMessage.setText("You try to login!");
+    public void loginButtonOnAction(ActionEvent e) throws SQLException, IOException {
+        String username = tf_username.getText();
+        String password = tf_password.getText();
+        if (!username.isBlank() && !password.isBlank()) {
+            if (checkLogin(username, password)) {
+                lb_loginMessage.setText("Login successful!");
+                switchToMain(e);
+            } else {
+                lb_loginMessage.setText("Invalid username or password!");
+            }
         } else {
             lb_loginMessage.setText("Please enter username and password");
         }
     }
 
-
+    public boolean checkLogin(String username, String password) throws SQLException {
+        SqliteConnection sqliteConnection = new SqliteConnection();
+        UserDAO userDAO = new UserDAO(sqliteConnection.connect());
+        try {
+            User user = userDAO.getUserByHoTen(username);
+            if (user != null && user.getMatKhau().equals(password)) {
+                return true;
+            }
+        } catch (SQLException | ParseException ex) {
+            ex.printStackTrace();
+        }
+        userDAO.close();
+        return false;
+    }
 
     public void switchToManage(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("Manage.fxml"));

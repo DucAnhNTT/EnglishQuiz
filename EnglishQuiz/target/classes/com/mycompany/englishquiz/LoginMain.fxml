@@ -26,7 +26,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="logginButton" layoutX="365.0" layoutY="297.0" mnemonicParsing="false" onAction="#logginButtonOnAction" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Login" textFill="#a0a2ab">
+      <Button fx:id="logginButton" layoutX="365.0" layoutY="297.0" mnemonicParsing="false" onAction="#loginButtonOnAction" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Login" textFill="#a0a2ab">
          <font>
             <Font size="18.0" />
          </font>
