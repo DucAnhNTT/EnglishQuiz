@@ -14,21 +14,21 @@
 
 <AnchorPane id="AnchorPane" prefHeight="447.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.englishquiz.ModifyAccount">
    <children>
-      <TextField layoutX="122.0" layoutY="35.0" prefHeight="43.0" prefWidth="379.0" promptText="Name (this change username too)">
+      <TextField fx:id="nameField" layoutX="122.0" layoutY="35.0" prefHeight="43.0" prefWidth="379.0" promptText="Name (this change username too)">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <PasswordField layoutX="125.0" layoutY="113.0" prefHeight="43.0" prefWidth="379.0" promptText="Password">
+      <PasswordField fx:id="passwordField" layoutX="125.0" layoutY="113.0" prefHeight="43.0" prefWidth="379.0" promptText="Password">
          <font>
             <Font size="20.0" />
          </font>
       </PasswordField>
-      <Button layoutX="486.0" layoutY="393.0" mnemonicParsing="false" onAction="#changePassword" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;" text="Modify" textFill="#a0a2ab">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
+      <Button layoutX="486.0" layoutY="393.0" mnemonicParsing="false" onAction="#updateUserInfo" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;" text="Modify" textFill="#a0a2ab">
+    <font>
+        <Font size="18.0" />
+    </font>
+</Button>
       <ImageView blendMode="MULTIPLY" fitHeight="43.0" fitWidth="48.0" layoutX="52.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Images/user.png" />
@@ -39,12 +39,12 @@
             <Image url="@../../../Images/pass.png" />
          </image>
       </ImageView>
-      <Button layoutX="14.0" layoutY="393.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Back" textFill="#a0a2ab">
+      <Button layoutX="14.0" layoutY="393.0" mnemonicParsing="false" onAction="#back" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Back" textFill="#a0a2ab">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <RadioButton alignment="CENTER_LEFT" layoutX="128.0" layoutY="188.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="178.0" selected="true" styleClass="gender" text="Male" textFill="#a0a2ab">
+      <RadioButton fx:id="maleRadioButton" alignment="CENTER_LEFT" layoutX="128.0" layoutY="188.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="178.0" selected="true" styleClass="gender" text="Male" textFill="#a0a2ab">
          <font>
             <Font size="20.0" />
          </font>
@@ -52,7 +52,7 @@
             <ToggleGroup fx:id="gender_Modify" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="346.0" layoutY="188.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="153.0" selected="true" text="Female" textFill="#a0a2ab" toggleGroup="$gender_Modify">
+      <RadioButton fx:id="femaleRadioButton" layoutX="346.0" layoutY="188.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="153.0" selected="true" text="Female" textFill="#a0a2ab" toggleGroup="$gender_Modify">
          <font>
             <Font size="20.0" />
          </font>
@@ -67,17 +67,20 @@
             <Image url="@../../../Images/pngtree-male-and-female-gender-sex-png-image_4960077.png" />
          </image>
       </ImageView>
-<DatePicker id="date_picker" fx:id="date_user" layoutX="123.0" layoutY="312.0" prefHeight="43.0" prefWidth="379.0" promptText="01/01/2000" showWeekNumbers="true" style="-fx-font-size: 20px;" stylesheets="@FXMLCSS.css" />
+<DatePicker id="date_picker" fx:id="dateOfBirthPicker" layoutX="123.0" layoutY="312.0" prefHeight="43.0" prefWidth="379.0" promptText="01/01/2000" showWeekNumbers="true" style="-fx-font-size: 20px;" />
       <ImageView blendMode="MULTIPLY" fitHeight="62.0" fitWidth="69.0" layoutX="43.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
      <image>
         <Image url="@../../../Images/calendar-date-date-notes-business-office-event-icon-template-black-color-editable-calendar-date-symbol-flat-vector-illustration-171286982.jpg" />
      </image>
   </ImageView>
-  <TextField fx:id="tf_address" layoutX="125.0" layoutY="244.0" prefHeight="43.0" prefWidth="379.0" promptText="Address">
+  <TextField fx:id="addressField" layoutX="125.0" layoutY="244.0" prefHeight="43.0" prefWidth="379.0" promptText="Address">
      <font>
         <Font size="20.0" />
      </font>
   </TextField>
-  <Label fx:id="messageLabel" layoutX="125.0" layoutY="370.0" prefHeight="30.0" prefWidth="379.0" textFill="#ff0000" />
+  <Label fx:id="messageLabel" alignment="CENTER" layoutX="125.0" layoutY="370.0" prefHeight="30.0" prefWidth="379.0" textFill="#ff0000">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
    </children>
 </AnchorPane>

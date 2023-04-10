@@ -2,11 +2,11 @@ package com.mycompany.englishquiz;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,9 +21,13 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import com.mycompany.englishquiz.Code.User;
+import javafx.scene.control.Button;
 
 public class ModifyAccount {
+
+    public ModifyAccount() throws SQLException {
+        sqlite = new SqliteConnection();
+    }
 
     private Stage stage;
     private Scene scene;
@@ -51,115 +55,47 @@ public class ModifyAccount {
     @FXML
     private Label messageLabel;
 
-    public ModifyAccount() {
-        sqlite = new SqliteConnection();
-    }
+public void updateUserInfo() {
+    System.out.println("updateUserInfo() called");
+    String newName = nameField.getText();
+    String newPassword = passwordField.getText();
+    String newGender = maleRadioButton.isSelected() ? "Nam" : "Nữ";
+    String newAddress = addressField.getText();
+    LocalDate newDateOfBirth = dateOfBirthPicker.getValue();
+    String userName = UserSession.getInstance().getLoggedInUserName();
+    String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, gioiTinh = ?, queQuan = ?, ngaySinh = ? WHERE hoTen = ?";
 
-    public void changePassword() {
-        String newPassword = passwordField.getText();
-        int userId = UserSession.getInstance().getLoggedInUserId();
-        try ( Connection conn = sqlite.connect()) {
-            String sql = "UPDATE users SET mat_khau = ? WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newPassword);
-            pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
-            messageLabel.setText("Password changed successfully");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            messageLabel.setText("Failed to change password");
-        }
-    }
+    System.out.println("newName: " + newName);
+    System.out.println("newPassword: " + newPassword);
+    System.out.println("newGender: " + newGender);
+    System.out.println("newAddress: " + newAddress);
+    System.out.println("newDateOfBirth: " + newDateOfBirth);
 
-    public void updateName() {
-        String newName = nameField.getText();
-        int userId = UserSession.getInstance().getLoggedInUserId();
-        try ( Connection conn = sqlite.connect()) {
-            String sql = "UPDATE users SET ho_ten = ? WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newName);
-            pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
-            messageLabel.setText("Name updated successfully");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            messageLabel.setText("Failed to update name");
-        }
-    }
-
-    public void updateGender() {
-        String newGender = maleRadioButton.isSelected() ? "Nam" : "Nữ";
-        int userId = UserSession.getInstance().getLoggedInUserId();
-        try ( Connection conn = sqlite.connect()) {
-            String sql = "UPDATE users SET gioi_tinh = ? WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newGender);
-            pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
-            messageLabel.setText("Gender updated successfully");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            messageLabel.setText("Failed to update gender");
-        }
-    }
-
-    public void updateAddress() {
-        String newAddress = addressField.getText();
-        int userId = UserSession.getInstance().getLoggedInUserId();
-        try ( Connection conn = sqlite.connect()) {
-            String sql = "UPDATE users SET que_quan = ? WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newAddress);
-            pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
-            messageLabel.setText("Address updated successfully");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            messageLabel.setText("Failed to update address");
-        }
-    }
-
-    public void updateDateOfBirth() {
-        LocalDate newDateOfBirth = dateOfBirthPicker.getValue();
-        int userId = UserSession.getInstance().getLoggedInUserId();
-        try ( Connection conn = sqlite.connect()) {
-            String sql = "UPDATE users SET ngay_sinh = ? WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newDateOfBirth.toString());
-            pstmt.setInt(2, userId);
-            pstmt.executeUpdate();
-            messageLabel.setText("Date of birth updated successfully");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            messageLabel.setText("Failed to update date of birth");
-        }
-    }
-
-    public void updateUserInfo() {
-        String newName = nameField.getText();
-        String newGender = maleRadioButton.isSelected() ? "Nam" : "Nữ";
-        String newAddress = addressField.getText();
-        LocalDate newDateOfBirth = dateOfBirthPicker.getValue();
-        int userId = UserSession.getInstance().getLoggedInUserId();
-        try ( Connection conn = sqlite.connect()) {
-            String sql = "UPDATE users SET ho_ten = ?, gioi_tinh = ?, que_quan = ?, ngay_sinh = ? WHERE id = ?";
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, newName);
-            pstmt.setString(2, newGender);
-            pstmt.setString(3, newAddress);
-            pstmt.setString(4, newDateOfBirth.toString());
-            pstmt.setInt(5, userId);
-            pstmt.executeUpdate();
+    try ( Connection conn = DriverManager.getConnection("jdbc:sqlite:src\\main\\resources\\Database\\Users.db");  PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, newName);
+        pstmt.setString(2, newPassword);
+        pstmt.setString(3, newGender);
+        pstmt.setString(4, newAddress);
+        pstmt.setString(5, newDateOfBirth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        pstmt.setString(6, userName);
+        System.out.println("SQL query: " + sql);
+        int rowsUpdated = pstmt.executeUpdate();
+        if (rowsUpdated > 0) {
+            System.out.println("User info updated successfully");
             messageLabel.setText("User info updated successfully");
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
+        } else {
+            System.out.println("Failed to update user info");
             messageLabel.setText("Failed to update user info");
         }
+    } catch (SQLException e) {
+        System.err.println(e.getMessage());
+        messageLabel.setText("Failed to update user info");
     }
+}
 
     public void back(ActionEvent event) throws IOException {
         // load the main menu
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainScreen.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
 

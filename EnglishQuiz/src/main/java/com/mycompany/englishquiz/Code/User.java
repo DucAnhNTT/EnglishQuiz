@@ -1,6 +1,5 @@
 package com.mycompany.englishquiz.Code;
 
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -12,19 +11,20 @@ public class User {
     private String queQuan;
     private String gioiTinh;
     private LocalDate ngaySinh;
-    private String ngayGiaNhap;
+    private LocalDate ngayGiaNhap;
 
-    public User(String hoTen, String matKhau, String queQuan, String gioiTinh, String ngaySinhStr, String ngayGiaNhapStr) throws ParseException {
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public User(String hoTen, String matKhau, String queQuan, String gioiTinh, String ngaySinhStr, String ngayGiaNhapStr) {
         this.hoTen = hoTen;
         this.matKhau = matKhau;
         this.queQuan = queQuan;
         this.gioiTinh = gioiTinh;
-        this.ngaySinh = LocalDate.parse(ngaySinhStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.ngayGiaNhap = ngayGiaNhapStr;
+        this.ngaySinh = LocalDate.parse(ngaySinhStr, DATE_FORMATTER);
+        this.ngayGiaNhap = LocalDate.parse(ngayGiaNhapStr, DATE_FORMATTER);
     }
 
-    public User(int id, String hoTen, String matKhau, String queQuan, String gioiTinh, LocalDate ngaySinh, String ngayGiaNhap) {
-        this.id = id;
+    public User(String hoTen, String matKhau, String queQuan, String gioiTinh, LocalDate ngaySinh, LocalDate ngayGiaNhap) {
         this.hoTen = hoTen;
         this.matKhau = matKhau;
         this.queQuan = queQuan;
@@ -33,14 +33,14 @@ public class User {
         this.ngayGiaNhap = ngayGiaNhap;
     }
 
-    public User(int id, String hoTen, String matKhau, String queQuan, String gioiTinh, String ngaySinhStr, String ngayGiaNhapStr) {
+    public User(int id, String hoTen, String matKhau, String queQuan, String gioiTinh, LocalDate ngaySinh, LocalDate ngayGiaNhap) {
         this.id = id;
         this.hoTen = hoTen;
         this.matKhau = matKhau;
         this.queQuan = queQuan;
         this.gioiTinh = gioiTinh;
-        this.ngaySinh = LocalDate.parse(ngaySinhStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        this.ngayGiaNhap = ngayGiaNhapStr;
+        this.ngaySinh = ngaySinh;
+        this.ngayGiaNhap = ngayGiaNhap;
     }
 
     public int getId() {
@@ -91,11 +91,11 @@ public class User {
         this.ngaySinh = ngaySinh;
     }
 
-    public String getNgayGiaNhap() {
+    public LocalDate getNgayGiaNhap() {
         return ngayGiaNhap;
     }
 
-    public void setNgayGiaNhap(String ngayGiaNhap) {
+    public void setNgayGiaNhap(LocalDate ngayGiaNhap) {
         this.ngayGiaNhap = ngayGiaNhap;
     }
 }

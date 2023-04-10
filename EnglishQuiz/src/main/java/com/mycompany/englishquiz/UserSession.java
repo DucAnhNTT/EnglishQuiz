@@ -62,4 +62,17 @@ public class UserSession {
     public static void setInstance(UserSession aInstance) {
         instance = aInstance;
     }
+
+    public void clear() {
+        user = null;
+        userDAO = null;
+    }
+    
+    public String getLoggedInUserName() {
+    if (isLoggedIn()) {
+        return getUser().getHoTen();
+    } else {
+        return null; // or throw an exception
+    }
+}
 }

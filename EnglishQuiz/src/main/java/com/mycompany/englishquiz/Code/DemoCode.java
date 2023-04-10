@@ -2,13 +2,13 @@ package com.mycompany.englishquiz.Code;
 
 import static com.mycompany.englishquiz.Code.Utils.DATABASE_URL;
 import com.mycompany.englishquiz.SqliteConnection;
-import com.mycompany.englishquiz.UserDAO;
 import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Date;
 
 public class DemoCode {
 
@@ -27,9 +27,9 @@ public class DemoCode {
             pstmt.setString(2, user.getGioiTinh());
 
             // convert the ngaySinh and ngayGiaNhap strings to LocalDate objects
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-            LocalDate ngaySinh = LocalDate.parse(dateFormat.format(user.getNgaySinh()), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            LocalDate ngayGiaNhap = LocalDate.parse(user.getNgayGiaNhap(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            LocalDate ngaySinh = LocalDate.parse(dateFormat.format(user.getNgaySinh()), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate ngayGiaNhap = LocalDate.parse(dateFormat.format(user.getNgayGiaNhap()), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
             pstmt.setString(3, dateFormat.format(Date.from(ngaySinh.atStartOfDay(ZoneId.systemDefault()).toInstant())));
             pstmt.setString(4, dateFormat.format(Date.from(ngayGiaNhap.atStartOfDay(ZoneId.systemDefault()).toInstant())));
@@ -61,21 +61,26 @@ public class DemoCode {
         }
     }
 
-    private static void printUsers() {
+    private static void printUsers() throws ParseException {
         String sql = "SELECT * FROM Users";
 
         try ( Connection conn = DriverManager.getConnection(DATABASE_URL);  Statement stmt = conn.createStatement();  ResultSet rs = stmt.executeQuery(sql)) {
 
             // iterate over the result set and print each row
+            int i = 1;
             while (rs.next()) {
                 String hoTen = rs.getString("hoTen");
                 String matKhau = rs.getString("matKhau");
                 String queQuan = rs.getString("queQuan");
                 String gioiTinh = rs.getString("gioiTinh");
-                String ngaySinh = rs.getString("ngaySinh");
-                String ngayGiaNhap = rs.getString("ngayGiaNhap");
+                String ngaySinhString = rs.getString("ngaySinh");
+                String ngayGiaNhapString = rs.getString("ngayGiaNhap");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate ngaySinh = LocalDate.parse(ngaySinhString, formatter);
+                LocalDate ngayGiaNhap = LocalDate.parse(ngayGiaNhapString, formatter);
 
-                System.out.println(hoTen + " \t " + matKhau + " \t " + queQuan + " \t " + gioiTinh + " \t " + ngaySinh + " \t " + ngayGiaNhap);
+                System.out.printf("%d\t%s\t%s\t%s\t%s\t%s\t%s\n", i, hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap);
+                i++;
             }
 
         } catch (SQLException e) {
@@ -83,21 +88,32 @@ public class DemoCode {
         }
     }
 
-    public static void main(String[] args) throws SQLException {
-        SqliteConnection sqliteConnection = new SqliteConnection();
-        Connection conn = sqliteConnection.connect();
-        UserDAO userDAO = new UserDAO(conn);
-
-        // Retrieve all users from the database
-        List<User> users = userDAO.getAllUsers();
-
-        // Print the users to the console in the desired format
-        System.out.printf("%-20s %-20s %-20s %-10s %-15s %-15s\n", "Username", "Password", "Address", "Gender", "Date of Birth", "Date Joined");
-        for (User user : users) {
-            System.out.printf("%-20s %-20s %-20s %-10s %-15s %-15s\n", user.getHoTen(), user.getMatKhau(), user.getQueQuan(), user.getGioiTinh(), user.getNgaySinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), user.getNgayGiaNhap());
+public static void printAllUsers() throws Exception {
+    try (SqliteConnection sqlite = new SqliteConnection()) {
+        Connection conn = sqlite.connect();
+        String sql = "SELECT * FROM Users";
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        System.out.printf("%-5s%-20s%-15s%-15s%-10s%-15s%-15s\n", "ID", "Name", "Password", "Address", "Gender", "Date of Birth", "Date of Joining");
+        int i = 0;
+        while (rs.next()) {
+            int id = rs.getInt("idUser");
+            String name = rs.getString("hoTen");
+            String password = rs.getString("matKhau");
+            String address = rs.getString("queQuan");
+            String gender = rs.getString("gioiTinh");
+            LocalDate dateOfBirth = LocalDate.parse(rs.getString("ngaySinh"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate dateOfJoining = LocalDate.parse(rs.getString("ngayGiaNhap"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            System.out.printf("%-5d%-20s%-15s%-15s%-10s%-15s%-15s\n", i, name, password, address, gender, dateOfBirth, dateOfJoining);
+            i++;
         }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        System.err.println(e.getMessage());
+    }
+}
 
-        userDAO.close();
-        sqliteConnection.disconnect();
+    public static void main(String[] args) throws Exception {
+        DemoCode.printAllUsers();
     }
 }

@@ -1,7 +1,10 @@
 package com.mycompany.englishquiz;
 
+import com.mycompany.englishquiz.Code.User;
+import static com.mycompany.englishquiz.Code.Utils.DATABASE_URL;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,6 +57,18 @@ public class ManageController {
         stage.show();
     }
 
+    private void switchToLogin() {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));
+            Scene scene = new Scene(root);
+            Stage stage = (Stage) bt_deleteUser.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void logout(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Logout");
@@ -83,29 +98,27 @@ public class ManageController {
         stage.show();
     }
 
-    public void buttonDeleteUserOnAction(ActionEvent event) throws IOException, SQLException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete User");
-        alert.setHeaderText("Are you sure you want to delete this user?");
-        alert.setContentText("Click OK to confirm.");
+@FXML
+private void buttonDeleteUserOnAction(ActionEvent event) {
+    try {
+        // Get the current user
+        User currentUser = UserSession.getInstance().getUser();
+        System.out.println("Deleting user: " + currentUser.getHoTen());
 
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            Connection conn = null;
-            try {
-                conn = new SqliteConnection().connect();
-                UserDAO userDAO = new UserDAO(conn);
-                userDAO.deleteUser(UserSession.getInstance().getUser().getId()); // returns the ID of the currently logged-in user);
-                UserSession.getInstance().logout();
-                switchToLoginMain(event);
-            } catch (SQLException e) {
-                System.err.println("Error: " + e);
-            } finally {
-                if (conn != null) {
-                    conn.close();
-                }
-            }
-        }
+        // Delete the user from the database
+        UserDAO userDAO = new UserDAO(DriverManager.getConnection(DATABASE_URL));
+        userDAO.deleteUser(currentUser.getHoTen());
+        userDAO.close();
+
+        // Clear the user session and switch to the login screen
+        UserSession.getInstance().clear();
+        System.out.println("User session cleared");
+        switchToLogin();
+    } catch (SQLException e) {
+        lb_manageMessage.setText("Error deleting user: " + e.getMessage());
+        System.err.println("Error deleting user: " + e.getMessage());
     }
+}
 
     public void switchToLoginMain(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));

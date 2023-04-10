@@ -24,6 +24,8 @@ import com.mycompany.englishquiz.UserDAO;
 import com.mycompany.englishquiz.UserSession;
 import com.mycompany.englishquiz.Code.User;
 import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 
@@ -172,7 +174,12 @@ public boolean checkLogin(String username, String password) throws SQLException 
     public void initialize(URL url, ResourceBundle rb) {
         Connection conn = null;
         // Create a new SqliteConnection object
-        SqliteConnection sqliteConnection = new SqliteConnection();
+        SqliteConnection sqliteConnection = null;
+        try {
+            sqliteConnection = new SqliteConnection();
+        } catch (SQLException ex) {
+            Logger.getLogger(UtilsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         // Connect to the database
         conn = sqliteConnection.connect();
         // Retrieve the UserDAO object from the UserSession
@@ -197,4 +204,6 @@ public boolean checkLogin(String username, String password) throws SQLException 
             alert.showAndWait();
         }
     }
+    
+    
 }

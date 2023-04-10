@@ -62,16 +62,10 @@ public class MainScreen implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Set the action for the bt_main_practice button
-        bt_main_practice.setOnAction(event -> {
-            // Code to handle the button click goes here
-            System.out.println("Practice button clicked");
-        });
+        bt_main_practice.setOnAction(event -> System.out.println("Practice button clicked"));
 
         // Set the action for the bt_main_test button
-        bt_main_test.setOnAction(event -> {
-            // Code to handle the button click goes here
-            System.out.println("Test button clicked");
-        });
+        bt_main_test.setOnAction(event -> System.out.println("Test button clicked"));
 
         // Set the action for the bt_main_manage button
         bt_main_manage.setOnAction(event -> {

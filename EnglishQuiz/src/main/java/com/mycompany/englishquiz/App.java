@@ -10,28 +10,19 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.StageStyle;
 
-
 public class App extends Application {
 
-    
-    
     @Override
-    public void start(Stage stage) {
-        try {
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
-            Parent root = FXMLLoader.load(getClass().getResource("LoginMain.fxml"));
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-
-            stage.setOnCloseRequest(event -> {
-                event.consume();
-                logout(stage);
-            });
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            logout(stage);
+        });
     }
 
     public void logout(Stage stage) {
