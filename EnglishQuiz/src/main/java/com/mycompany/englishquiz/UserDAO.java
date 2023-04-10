@@ -1,99 +1,141 @@
 package com.mycompany.englishquiz;
 
+import com.mycompany.englishquiz.Code.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import com.mycompany.englishquiz.Code.User;
-import com.mycompany.englishquiz.Code.Utils;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
 
-    private Connection connection;
+    private Connection conn;
 
-    public UserDAO(Connection connection) {
-        this.connection = connection;
-        createTable();
+    public UserDAO(Connection conn) {
+        this.conn = conn;
     }
 
-    private void createTable() {
-        try {
-            Statement statement = connection.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS Users (\n"
-                    + "    hoTen TEXT PRIMARY KEY,\n"
-                    + "    matKhau TEXT NOT NULL,\n"
-                    + "    queQuan TEXT NOT NULL,\n"
-                    + "    gioiTinh TEXT NOT NULL,\n"
-                    + "    ngaySinh TEXT NOT NULL,\n"
-                    + "    ngayGiaNhap TEXT NOT NULL\n"
-                    + ");";
-            statement.execute(sql);
-            statement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public void addUser(User user) throws SQLException {
+        // Check if a user with the same username already exists
+        String sql = "SELECT COUNT(*) FROM Users WHERE hoTen = ?";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, user.getHoTen());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next() && resultSet.getInt(1) > 0) {
+                // A user with the same username already exists
+                throw new SQLException("Username already exists");
+            }
         }
-    }
-
-    public void insertUser(User user) throws SQLException {
-        String sql = "INSERT INTO Users (hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, user.getHoTen());
-        statement.setString(2, user.getMatKhau());
-        statement.setString(3, user.getQueQuan());
-        statement.setString(4, user.getGioiTinh());
-        statement.setString(5, Utils.f.format(user.getNgaySinh()));
-        statement.setString(6, Utils.f.format(new java.util.Date()));
-        statement.executeUpdate();
-        statement.close();
-    }
-
-    public User getUserByHoTen(String hoTen) throws SQLException, ParseException {
-        String sql = "SELECT * FROM Users WHERE hoTen = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, hoTen);
-        ResultSet result = statement.executeQuery();
-        User user = null;
-        if (result.next()) {
-            String matKhau = result.getString("matKhau");
-            String queQuan = result.getString("queQuan");
-            String gioiTinh = result.getString("gioiTinh");
-            String ngaySinhString = result.getString("ngaySinh");
-            Date ngaySinh = new SimpleDateFormat("dd/MM/yyyy").parse(ngaySinhString);
-            String ngayGiaNhap = result.getString("ngayGiaNhap");
-            user = new User(hoTen, matKhau, queQuan, gioiTinh, Utils.f.format(ngaySinh), ngayGiaNhap);
+        // Insert the new user
+        sql = "INSERT INTO Users(hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap) VALUES(?,?,?,?,?,?)";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, user.getHoTen());
+            statement.setString(2, user.getMatKhau());
+            statement.setString(3, user.getQueQuan());
+            statement.setString(4, user.getGioiTinh());
+            statement.setString(5, user.getNgaySinh().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            statement.setString(6, user.getNgayGiaNhap());
+            statement.executeUpdate();
         }
-        result.close();
-        statement.close();
-        return user;
     }
 
     public void updateUser(User user) throws SQLException {
-        String sql = "UPDATE Users SET matKhau = ?, queQuan = ?, gioiTinh = ?, ngaySinh = ? WHERE hoTen = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, user.getMatKhau());
-        statement.setString(2, user.getQueQuan());
-        statement.setString(3, user.getGioiTinh());
-        statement.setString(4, Utils.f.format(user.getNgaySinh()));
-        statement.setString(5, user.getHoTen());
-        statement.executeUpdate();
-        statement.close();
+        String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, queQuan = ?, gioiTinh = ?, ngaySinh = ?, ngayGiaNhap = ? WHERE idUser = ?";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, user.getHoTen());
+            statement.setString(2, user.getMatKhau());
+            statement.setString(3, user.getQueQuan());
+            statement.setString(4, user.getGioiTinh());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            statement.setString(5, dateFormat.format(user.getNgaySinh()));
+            statement.setString(6, user.getNgayGiaNhap());
+            statement.setInt(7, user.getId());
+            statement.executeUpdate();
+        }
     }
 
-    public void deleteUser(String hoTen) throws SQLException {
-        String sql = "DELETE FROM Users WHERE hoTen = ?";
-        PreparedStatement statement = connection.prepareStatement(sql);
-        statement.setString(1, hoTen);
-        statement.executeUpdate();
-        statement.close();
+    public void deleteUser(int id) throws SQLException {
+        String sql = "DELETE FROM Users WHERE idUser = ?";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, id);
+            statement.executeUpdate();
+        }
+    }
+
+    public User getUserById(int idUser) throws SQLException {
+        String sql = "SELECT * FROM Users WHERE idUser = ?";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setInt(1, idUser);
+            try ( ResultSet result = statement.executeQuery()) {
+                User user = null;
+                if (result.next()) {
+                    // get the values from the result set
+                    String hoTen = result.getString("hoTen");
+                    String matKhau = result.getString("matKhau");
+                    String queQuan = result.getString("queQuan");
+                    String gioiTinh = result.getString("gioiTinh");
+                    LocalDate ngaySinh = LocalDate.parse(result.getString("ngaySinh"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    String ngayGiaNhap = result.getString("ngayGiaNhap");
+
+                    // create a new User object with the retrieved values
+                    user = new User(idUser, hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap);
+                }
+                System.out.println("User: " + user);
+                return user;
+            }
+        }
+    }
+
+    public User getUserByUsername(String username) throws SQLException {
+        String sql = "SELECT * FROM Users WHERE hoTen = ?";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, username);
+            try ( ResultSet result = statement.executeQuery()) {
+                User user = null;
+                if (result.next()) {
+                    // get the values from the result set
+                    int idUser = result.getInt("idUser");
+                    String hoTen = result.getString("hoTen");
+                    String matKhau = result.getString("matKhau");
+                    String queQuan = result.getString("queQuan");
+                    String gioiTinh = result.getString("gioiTinh");
+                    LocalDate ngaySinh = LocalDate.parse(result.getString("ngaySinh"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                    String ngayGiaNhap = result.getString("ngayGiaNhap");
+
+                    // create a new User object with the retrieved values
+                    user = new User(idUser, hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap);
+                }
+                System.out.println("User: " + user);
+                return user;
+            }
+        }
+    }
+
+    public List<User> getAllUsers() throws SQLException {
+        String sql = "SELECT * FROM Users";
+        try ( PreparedStatement statement = conn.prepareStatement(sql);  ResultSet result = statement.executeQuery()) {
+            List<User> userList = new ArrayList<>();
+            while (result.next()) {
+                int idUser = result.getInt("idUser");
+                String hoTen = result.getString("hoTen");
+                String matKhau = result.getString("matKhau");
+                String queQuan = result.getString("queQuan");
+                String gioiTinh = result.getString("gioiTinh");
+                LocalDate ngaySinh = LocalDate.parse(result.getString("ngaySinh"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                String ngayGiaNhap = result.getString("ngayGiaNhap");
+                User user = new User(idUser, hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap);
+                userList.add(user);
+            }
+            return userList;
+        }
     }
 
     public void close() throws SQLException {
-        if (connection != null) {
-            connection.close();
-        }
+        conn.close();
+
     }
 }
