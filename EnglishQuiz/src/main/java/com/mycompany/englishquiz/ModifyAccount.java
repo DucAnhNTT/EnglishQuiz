@@ -55,43 +55,52 @@ public class ModifyAccount {
     @FXML
     private Label messageLabel;
 
-public void updateUserInfo() {
-    System.out.println("updateUserInfo() called");
-    String newName = nameField.getText();
-    String newPassword = passwordField.getText();
-    String newGender = maleRadioButton.isSelected() ? "Nam" : "Nữ";
-    String newAddress = addressField.getText();
-    LocalDate newDateOfBirth = dateOfBirthPicker.getValue();
-    String userName = UserSession.getInstance().getLoggedInUserName();
-    String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, gioiTinh = ?, queQuan = ?, ngaySinh = ? WHERE hoTen = ?";
+    public void updateUserInfo() throws IOException {
+        System.out.println("updateUserInfo() called");
+        String newName = nameField.getText();
+        String newPassword = passwordField.getText();
+        String newGender = maleRadioButton.isSelected() ? "Nam" : "Nữ";
+        String newAddress = addressField.getText();
+        LocalDate newDateOfBirth = dateOfBirthPicker.getValue();
+        String userName = UserSession.getInstance().getLoggedInUserName();
+        String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, gioiTinh = ?, queQuan = ?, ngaySinh = ? WHERE hoTen = ?";
 
-    System.out.println("newName: " + newName);
-    System.out.println("newPassword: " + newPassword);
-    System.out.println("newGender: " + newGender);
-    System.out.println("newAddress: " + newAddress);
-    System.out.println("newDateOfBirth: " + newDateOfBirth);
+        System.out.println("newName: " + newName);
+        System.out.println("newPassword: " + newPassword);
+        System.out.println("newGender: " + newGender);
+        System.out.println("newAddress: " + newAddress);
+        System.out.println("newDateOfBirth: " + newDateOfBirth);
 
-    try ( Connection conn = DriverManager.getConnection("jdbc:sqlite:src\\main\\resources\\Database\\Users.db");  PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        pstmt.setString(1, newName);
-        pstmt.setString(2, newPassword);
-        pstmt.setString(3, newGender);
-        pstmt.setString(4, newAddress);
-        pstmt.setString(5, newDateOfBirth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        pstmt.setString(6, userName);
-        System.out.println("SQL query: " + sql);
-        int rowsUpdated = pstmt.executeUpdate();
-        if (rowsUpdated > 0) {
-            System.out.println("User info updated successfully");
-            messageLabel.setText("User info updated successfully");
-        } else {
-            System.out.println("Failed to update user info");
+        try ( Connection conn = DriverManager.getConnection("jdbc:sqlite:src\\main\\resources\\Database\\Users.db");  PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newName);
+            pstmt.setString(2, newPassword);
+            pstmt.setString(3, newGender);
+            pstmt.setString(4, newAddress);
+            pstmt.setString(5, newDateOfBirth.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            pstmt.setString(6, userName);
+            System.out.println("SQL query: " + sql);
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("User info updated successfully");
+                messageLabel.setText("User info updated successfully");
+
+                // switch to the login screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginMain.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+
+                Stage stage = (Stage) messageLabel.getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                System.out.println("Failed to update user info");
+                messageLabel.setText("Failed to update user info");
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
             messageLabel.setText("Failed to update user info");
         }
-    } catch (SQLException e) {
-        System.err.println(e.getMessage());
-        messageLabel.setText("Failed to update user info");
     }
-}
 
     public void back(ActionEvent event) throws IOException {
         // load the main menu

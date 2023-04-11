@@ -1,11 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1">
-    
+<AnchorPane prefHeight="445.0" prefWidth="552.0" style="-fx-background-color: #151928;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.englishquiz.SearchUsers">
+   <children>
+      <TableView fx:id="tableView" prefHeight="480.0" prefWidth="731.0" styleClass="table-view">
+         <columns>
+            <TableColumn fx:id="idColumn" prefWidth="94.00000286102295" styleClass="table-column" text="test_id">
+               <cellValueFactory>
+                  <PropertyValueFactory property="id" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="nameColumn" minWidth="0.0" prefWidth="0.0" styleClass="table-column" text="Name">
+               <cellValueFactory>
+                  <PropertyValueFactory property="hoTen" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="addressColumn" prefWidth="142.6666488647461" styleClass="table-column" text="Date taken">
+               <cellValueFactory>
+                  <PropertyValueFactory property="queQuan" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="genderColumn" prefWidth="138.6667022705078" styleClass="table-column" text="Correct">
+               <cellValueFactory>
+                  <PropertyValueFactory property="gioiTinh" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="dobColumn" minWidth="0.0" prefWidth="155.33328247070312" styleClass="table-column" text="Wrong">
+               <cellValueFactory>
+                  <PropertyValueFactory property="ngaySinh" />
+               </cellValueFactory>
+            </TableColumn>
+            <TableColumn fx:id="dojColumn" minWidth="0.0" prefWidth="164.6666259765625" styleClass="table-column" text="Result">
+               <cellValueFactory>
+                  <PropertyValueFactory property="dateOfJoining" />
+               </cellValueFactory>
+            </TableColumn>
+         </columns>
+      </TableView>
+   </children>
 </AnchorPane>

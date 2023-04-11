@@ -15,12 +15,15 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAO {
+public class UserDAO implements AutoCloseable {
 
     private Connection conn;
 
     public UserDAO(Connection conn) {
         this.conn = conn;
+    }
+
+    public UserDAO() {
     }
 
     public void addUser(User user) throws SQLException {
@@ -48,31 +51,63 @@ public class UserDAO {
         }
     }
 
-public void updateUser(User user) throws SQLException {
-    String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, queQuan = ?, gioiTinh = ?, ngaySinh = ?, ngayGiaNhap = ? WHERE idUser = ?";
-    try ( PreparedStatement statement = conn.prepareStatement(sql)) {
-        statement.setString(1, user.getHoTen());
-        statement.setString(2, user.getMatKhau());
-        statement.setString(3, user.getQueQuan());
-        statement.setString(4, user.getGioiTinh());
-        statement.setString(5, user.getNgaySinh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        statement.setString(6, user.getNgayGiaNhap().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        statement.setInt(7, user.getId());
-        statement.executeUpdate();
-    }
-}
+    public List<User> searchUsers(String name, String address, String gender, LocalDate dob) {
+        List<User> users = new ArrayList<>();
 
-public void deleteUser(String hoTen) throws SQLException {
-    String sql = "DELETE FROM Users WHERE hoTen = ?";
-    try ( PreparedStatement statement = conn.prepareStatement(sql)) {
-        statement.setString(1, hoTen);
-        int rowsDeleted = statement.executeUpdate();
-        System.out.println(rowsDeleted + " rows deleted");
-    } catch (SQLException e) {
-        System.err.println("Error deleting user: " + e.getMessage());
-        throw e;
+        try ( PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Users WHERE hoTen LIKE ? AND queQuan LIKE ? AND gioiTinh LIKE ? AND ngaySinh LIKE ?")) {
+
+            stmt.setString(1, "%" + name + "%");
+            stmt.setString(2, "%" + address + "%");
+            stmt.setString(3, "%" + gender + "%");
+            stmt.setString(4, dob != null ? dob.toString() : "%");
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("idUser");
+                String hoTen = rs.getString("hoTen");
+                String matKhau = rs.getString("matKhau");
+                String queQuan = rs.getString("queQuan");
+                String gioiTinh = rs.getString("gioiTinh");
+                LocalDate ngaySinh = LocalDate.parse(rs.getString("ngaySinh"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate ngayGiaNhap = LocalDate.parse(rs.getString("ngayGiaNhap"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                User user = new User(id, hoTen, matKhau, queQuan, gioiTinh, ngaySinh, ngayGiaNhap);
+                users.add(user);
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return users;
     }
-}
+
+    public void updateUser(User user) throws SQLException {
+        String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, queQuan = ?, gioiTinh = ?, ngaySinh = ?, ngayGiaNhap = ? WHERE idUser = ?";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, user.getHoTen());
+            statement.setString(2, user.getMatKhau());
+            statement.setString(3, user.getQueQuan());
+            statement.setString(4, user.getGioiTinh());
+            statement.setString(5, user.getNgaySinh().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            statement.setString(6, user.getNgayGiaNhap().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            statement.setInt(7, user.getId());
+            statement.executeUpdate();
+        }
+    }
+
+    public void deleteUser(String hoTen) throws SQLException {
+        String sql = "DELETE FROM Users WHERE hoTen = ?";
+        try ( PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, hoTen);
+            int rowsDeleted = statement.executeUpdate();
+            System.out.println(rowsDeleted + " rows deleted");
+        } catch (SQLException e) {
+            System.err.println("Error deleting user: " + e.getMessage());
+            throw e;
+        }
+    }
 
     public User getUserById(int idUser) throws SQLException {
         String sql = "SELECT * FROM Users WHERE idUser = ?";

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -105,15 +107,24 @@ private void buttonDeleteUserOnAction(ActionEvent event) {
         User currentUser = UserSession.getInstance().getUser();
         System.out.println("Deleting user: " + currentUser.getHoTen());
 
-        // Delete the user from the database
-        UserDAO userDAO = new UserDAO(DriverManager.getConnection(DATABASE_URL));
-        userDAO.deleteUser(currentUser.getHoTen());
-        userDAO.close();
+        // Show an alert to confirm the user deletion
+        Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Confirm User Deletion");
+        alert.setHeaderText("Are you sure you want to delete this user?");
+        alert.setContentText("User: " + currentUser.getHoTen());
 
-        // Clear the user session and switch to the login screen
-        UserSession.getInstance().clear();
-        System.out.println("User session cleared");
-        switchToLogin();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Delete the user from the database
+            UserDAO userDAO = new UserDAO(DriverManager.getConnection(DATABASE_URL));
+            userDAO.deleteUser(currentUser.getHoTen());
+            userDAO.close();
+
+            // Clear the user session and switch to the login screen
+            UserSession.getInstance().clear();
+            System.out.println("User session cleared");
+            switchToLogin();
+        }
     } catch (SQLException e) {
         lb_manageMessage.setText("Error deleting user: " + e.getMessage());
         System.err.println("Error deleting user: " + e.getMessage());

@@ -1,13 +1,6 @@
-com\mycompany\englishquiz\Code\User.class
 com\mycompany\englishquiz\UserSession.class
-com\mycompany\englishquiz\UtilsController.class
-module-info.class
 com\mycompany\englishquiz\Code\DemoCode.class
-com\mycompany\englishquiz\MainScreen.class
-com\mycompany\englishquiz\UserDAO.class
-com\mycompany\englishquiz\Code\Utils.class
+com\mycompany\englishquiz\SignUpController$1.class
+com\mycompany\englishquiz\SearchUsers.class
 com\mycompany\englishquiz\ManageController.class
 com\mycompany\englishquiz\SignUpController.class
-com\mycompany\englishquiz\SqliteConnection.class
-com\mycompany\englishquiz\ModifyAccount.class
-com\mycompany\englishquiz\App.class
