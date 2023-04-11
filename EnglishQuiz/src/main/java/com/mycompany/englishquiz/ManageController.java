@@ -3,7 +3,6 @@ package com.mycompany.englishquiz;
 import com.mycompany.englishquiz.Code.User;
 import static com.mycompany.englishquiz.Code.Utils.DATABASE_URL;
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;

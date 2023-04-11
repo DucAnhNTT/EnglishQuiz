@@ -21,7 +21,6 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import javafx.scene.control.Button;
 
 public class ModifyAccount {
 

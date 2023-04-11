@@ -1,14 +1,10 @@
 package com.mycompany.englishquiz;
 
-import com.mycompany.englishquiz.SqliteConnection;
 import com.mycompany.englishquiz.Code.User;
-import static com.mycompany.englishquiz.Code.Utils.DATABASE_URL;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
