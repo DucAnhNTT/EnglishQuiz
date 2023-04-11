@@ -91,14 +91,29 @@ public class SearchUsers implements Initializable {
     public void filterTable() {
         String name = nameField.getText().trim();
         String address = addressField.getText().trim();
-        String gender = maleRadio.isSelected() ? "Male" : femaleRadio.isSelected() ? "Female" : "";
+        final String gender;
+        if (maleRadio.isSelected()) {
+            gender = "Nam";
+        } else if (femaleRadio.isSelected()) {
+            gender = "Nữ";
+        } else {
+            gender = "";
+        }
         LocalDate dob = dobPicker.getValue();
 
-        try ( Connection conn = DriverManager.getConnection(DATABASE_URL);  UserDAO userDAO = new UserDAO(conn)) {
+        try (Connection conn = DriverManager.getConnection(DATABASE_URL); UserDAO userDAO = new UserDAO(conn)) {
 
             List<User> filteredUsers = userDAO.searchUsers(name, address, gender, dob);
             ObservableList<User> userList = FXCollections.observableArrayList(filteredUsers);
-            filteredList = new FilteredList<>(userList, p -> true);
+            filteredList = new FilteredList<>(userList);
+            filteredList.setPredicate(user -> {
+                if (gender.isEmpty()) {
+                    return true;
+                } else {
+                    String gioiTinh = user.getGioiTinh();
+                    return gioiTinh != null && gioiTinh.equals(gender);
+                }
+            });
             tableView.setItems(filteredList);
 
         } catch (SQLException ex) {
