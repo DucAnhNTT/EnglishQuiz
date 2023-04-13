@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +15,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -54,22 +58,39 @@ public class ModifyAccount {
     @FXML
     private Label messageLabel;
 
-    public void updateUserInfo() throws IOException {
-        System.out.println("updateUserInfo() called");
-        String newName = nameField.getText();
-        String newPassword = passwordField.getText();
-        String newGender = maleRadioButton.isSelected() ? "Nam" : "Nữ";
-        String newAddress = addressField.getText();
-        LocalDate newDateOfBirth = dateOfBirthPicker.getValue();
-        String userName = UserSession.getInstance().getLoggedInUserName();
-        String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, gioiTinh = ?, queQuan = ?, ngaySinh = ? WHERE hoTen = ?";
+public void updateUserInfo() throws IOException {
+    System.out.println("updateUserInfo() called");
+    String newName = nameField.getText();
+    String newPassword = passwordField.getText();
+    String newGender = maleRadioButton.isSelected() ? "Nam" : "Nữ";
+    String newAddress = addressField.getText();
+    LocalDate newDateOfBirth = dateOfBirthPicker.getValue();
+    String userName = UserSession.getInstance().getLoggedInUserName();
+    String sql = "UPDATE Users SET hoTen = ?, matKhau = ?, gioiTinh = ?, queQuan = ?, ngaySinh = ? WHERE hoTen = ?";
 
-        System.out.println("newName: " + newName);
-        System.out.println("newPassword: " + newPassword);
-        System.out.println("newGender: " + newGender);
-        System.out.println("newAddress: " + newAddress);
-        System.out.println("newDateOfBirth: " + newDateOfBirth);
+    System.out.println("newName: " + newName);
+    System.out.println("newPassword: " + newPassword);
+    System.out.println("newGender: " + newGender);
+    System.out.println("newAddress: " + newAddress);
+    System.out.println("newDateOfBirth: " + newDateOfBirth);
 
+    // Check if any of the text fields are empty
+    if (newName.isEmpty() || newPassword.isEmpty() || newAddress.isEmpty() || newDateOfBirth == null) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Warning");
+        alert.setHeaderText(null);
+        alert.setContentText("Please fill in all the fields.");
+        alert.showAndWait();
+        return;
+    }
+
+    // Show a confirmation alert before updating the user info
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle("Confirmation");
+    alert.setHeaderText(null);
+    alert.setContentText("Are you sure you want to update your user info?");
+    Optional<ButtonType> result = alert.showAndWait();
+    if (result.isPresent() && result.get() == ButtonType.OK) {
         try ( Connection conn = DriverManager.getConnection("jdbc:sqlite:src\\main\\resources\\Database\\Users.db");  PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, newName);
             pstmt.setString(2, newPassword);
@@ -100,6 +121,7 @@ public class ModifyAccount {
             messageLabel.setText("Failed to update user info");
         }
     }
+}
 
     public void back(ActionEvent event) throws IOException {
         // load the main menu

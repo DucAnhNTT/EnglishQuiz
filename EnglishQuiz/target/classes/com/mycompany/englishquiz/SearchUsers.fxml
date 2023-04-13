@@ -12,83 +12,109 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="801.0" prefWidth="1052.0" style="-fx-background-color: #151928;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.englishquiz.SearchUsers">
-   <children>
-      <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="803.0" prefWidth="271.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;">
-         <children>
-            <Label alignment="CENTER" layoutX="26.0" layoutY="14.0" prefHeight="17.0" prefWidth="223.0" text="Search Users" textFill="#a0a2ab">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <TextField fx:id="nameField" layoutX="37.0" layoutY="57.0" prefHeight="7.0" prefWidth="185.0" promptText="Name">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </TextField>
-            <DatePicker fx:id="dobPicker" layoutX="37.0" layoutY="212.0" prefHeight="43.0" prefWidth="185.0" promptText="Date of Birth" />
-            <TextField fx:id="addressField" layoutX="37.0" layoutY="146.0" prefHeight="43.0" prefWidth="185.0" promptText="Address">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </TextField>
-            <RadioButton fx:id="maleRadio" layoutX="37.0" layoutY="103.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="80.0" text="Male" textFill="#a0a2ab">
-               <font>
-                  <Font size="15.0" />
-               </font>
-               <toggleGroup>
-                  <ToggleGroup fx:id="gender" />
-               </toggleGroup>
-            </RadioButton>
-            <RadioButton fx:id="femaleRadio" layoutX="149.0" layoutY="108.0" mnemonicParsing="false" text="Female" textFill="#a0a2ab" toggleGroup="$gender">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </RadioButton>
-            <Button fx:id="bt_back" layoutX="90.0" layoutY="302.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="43.0" prefWidth="80.0" text="Back">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Button>
-         </children>
-      </AnchorPane>
-      <AnchorPane layoutX="271.0" layoutY="12.0" prefHeight="776.0" prefWidth="787.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;">
-         <children>
-            <TableView fx:id="tableView" layoutY="-11.0" prefHeight="800.0" prefWidth="787.0" styleClass="table-view">
-               <columns>
-                  <TableColumn fx:id="idColumn" prefWidth="26.66668701171875" styleClass="table-column" text="ID">
-                     <cellValueFactory>
-                        <PropertyValueFactory property="id" />
-                     </cellValueFactory>
-                  </TableColumn>
-                  <TableColumn fx:id="nameColumn" prefWidth="66.6666259765625" styleClass="table-column" text="Name">
-                     <cellValueFactory>
-                        <PropertyValueFactory property="hoTen" />
-                     </cellValueFactory>
-                  </TableColumn>
-                  <TableColumn fx:id="addressColumn" prefWidth="142.66659545898438" styleClass="table-column" text="Address">
-                     <cellValueFactory>
-                        <PropertyValueFactory property="queQuan" />
-                     </cellValueFactory>
-                  </TableColumn>
-                  <TableColumn fx:id="genderColumn" prefWidth="62.0" styleClass="table-column" text="Gender">
-                     <cellValueFactory>
-                        <PropertyValueFactory property="gioiTinh" />
-                     </cellValueFactory>
-                  </TableColumn>
-                  <TableColumn fx:id="dobColumn" minWidth="0.0" prefWidth="108.0" styleClass="table-column" text="Date of Birth">
-                     <cellValueFactory>
-                        <PropertyValueFactory property="ngaySinh" />
-                     </cellValueFactory>
-                  </TableColumn>
-                  <TableColumn fx:id="dojColumn" prefWidth="120.66650390625" styleClass="table-column" text="Date of Joining">
-                     <cellValueFactory>
-                        <PropertyValueFactory property="dateOfJoining" />
-                     </cellValueFactory>
-                  </TableColumn>
-               </columns>
-            </TableView>
-         </children>
-      </AnchorPane>
-   </children>
+<AnchorPane prefHeight="805.0" prefWidth="967.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.englishquiz.SearchUsers">
+       <children>
+        <AnchorPane layoutX="-13.0" prefHeight="803.0" prefWidth="282.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;">
+            <children>
+                <Label layoutX="85.0" layoutY="14.0" text="Search Users" textFill="#a0a2ab">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="nameField" layoutX="29.0" layoutY="55.0" prefWidth="223.0" promptText="Name">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </TextField>
+                <TextField fx:id="addressField" layoutX="29.0" layoutY="98.0" prefWidth="223.0" promptText="Address">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </TextField>
+                <RadioButton fx:id="maleRadio" layoutX="41.0" layoutY="143.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="86.0" text="Male" textFill="#a0a2ab">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                    <toggleGroup>
+                        <ToggleGroup fx:id="gender" />
+                    </toggleGroup>
+                </RadioButton>
+                <RadioButton fx:id="femaleRadio" layoutX="161.0" layoutY="143.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="86.0" text="Female" textFill="#a0a2ab" toggleGroup="$gender">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </RadioButton>
+                <DatePicker fx:id="dobPicker" layoutX="31.0" layoutY="187.0" prefHeight="32.0" prefWidth="223.0" promptText="yyyy-MM-dd" showWeekNumbers="true" style="-fx-font-size: 15;" stylesheets="@FXMLCSS.css">
+                </DatePicker>         
+                <Button fx:id="bt_add" layoutX="31.0" layoutY="249.0" mnemonicParsing="false" onAction="#addUser" prefHeight="43.0" prefWidth="105.0" text="Add">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="bt_delete" layoutX="145.0" layoutY="249.0" mnemonicParsing="false" onAction="#deleteUser" prefHeight="43.0" prefWidth="105.0" text="Delete">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="bt_modify" layoutX="29.0" layoutY="304.0" mnemonicParsing="false" onAction="#modifyUser" prefHeight="43.0" prefWidth="223.0" text="Modify">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+                <Button fx:id="bt_back" layoutX="29.0" layoutY="360.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="43.0" prefWidth="223.0" text="Back">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="271.0" layoutY="12.0" prefHeight="791.0" prefWidth="710.0" style="-fx-background-color: #151928; -fx-border-color: #a0a2ab;">
+            <children>
+                <TableView fx:id="tableView" layoutY="-11.0" prefHeight="800.0" prefWidth="721.0" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="26.66668701171875" styleClass="table-column" text="ID">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="id" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="nameColumn" prefWidth="66.6666259765625" styleClass="table-column" text="Name">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="hoTen" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="passwordColumn" prefWidth="66.6666259765625" styleClass="table-column" text="Password">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="matKhau" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="addressColumn" prefWidth="142.66659545898438" styleClass="table-column" text="Address">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="queQuan" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="genderColumn" prefWidth="62.0" styleClass="table-column" text="Gender">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="gioiTinh" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="dobColumn" minWidth="0.0" prefWidth="108.0" styleClass="table-column" text="Date of Birth">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="ngaySinh" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="dojColumn" prefWidth="120.66650390625" styleClass="table-column" text="Date of Joining">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="dateOfJoining" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="typeColumn" prefWidth="120.66650390625" styleClass="table-column" text="User type">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="typeColumn" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </children>
+        </AnchorPane>
+    </children>
 </AnchorPane>

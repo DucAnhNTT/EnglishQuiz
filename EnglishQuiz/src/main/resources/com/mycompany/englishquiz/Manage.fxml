@@ -48,7 +48,7 @@
     </font>
 </Button>
       <Label fx:id="lb_manageMessage" layoutX="24.0" layoutY="367.0" prefHeight="30.0" prefWidth="553.0" textFill="#d40a0a" />
-      <Button fx:id="logoutButton" layoutX="492.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Logout" textFill="#a0a2ab">
+      <Button fx:id="logoutButton" layoutX="478.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" prefHeight="43.0" prefWidth="99.0" style="-fx-background-color: #2196f3;" text="Logout" textFill="#a0a2ab">
          <font>
             <Font size="18.0" />
          </font>

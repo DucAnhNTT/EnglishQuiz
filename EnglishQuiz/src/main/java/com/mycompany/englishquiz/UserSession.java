@@ -12,6 +12,9 @@ public class UserSession {
     }
 
     public void logIn(User user) {
+        System.out.println("User logged in: " + UserSession.getInstance().isLoggedIn());
+        System.out.println("User type: " + UserSession.getInstance().getUser().getType_User());
+        System.out.println("User is manager: " + UserSession.getInstance().getUser().isManager());
         System.out.println("Logging in user: " + user.getHoTen());
         this.setUser(user);
     }
@@ -67,12 +70,12 @@ public class UserSession {
         user = null;
         userDAO = null;
     }
-    
+
     public String getLoggedInUserName() {
-    if (isLoggedIn()) {
-        return getUser().getHoTen();
-    } else {
-        return null; // or throw an exception
+        if (isLoggedIn()) {
+            return getUser().getHoTen();
+        } else {
+            return null; // or throw an exception
+        }
     }
-}
 }

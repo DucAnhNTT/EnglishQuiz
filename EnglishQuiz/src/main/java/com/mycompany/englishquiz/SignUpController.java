@@ -1,6 +1,5 @@
 package com.mycompany.englishquiz;
 
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -46,16 +45,16 @@ public class SignUpController {
     public void signUpButtonOnAction(ActionEvent e) throws SQLException, ParseException, IOException {
         if (!tf_SU_username.getText().isBlank() && !tf_SU_password.getText().isBlank() && date_user.getValue() != null
                 && !tf_address.getText().isBlank() && (rd_SUMale.isSelected() || rd_SUFemale.isSelected())) {
-            // Create a new user object with the input values
+// Create a new user object with the input values and typeUser = 0 (Regular user) by default
             String hoTen = tf_SU_username.getText();
             String matKhau = tf_SU_password.getText();
             String queQuan = tf_address.getText();
-            String gioiTinh = rd_SUMale.isSelected() ? "Male" : "Female";
+            String gioiTinh = rd_SUMale.isSelected() ? "Nam" : "Nữ";
             LocalDate ngaySinh = date_user.getValue();
             String ngaySinhStr = ngaySinh != null ? ngaySinh.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
             String ngayGiaNhapStr = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            User user = new User(hoTen, matKhau, queQuan, gioiTinh, ngaySinhStr, ngayGiaNhapStr);
-            // Insert the user into the database
+            User user = new User(hoTen, matKhau, queQuan, gioiTinh, ngaySinhStr, ngayGiaNhapStr, 0); // typeUser = 0 (Regular user) by default
+// Insert the user into the database
             SqliteConnection sqliteConnection = new SqliteConnection();
             UserDAO userDAO = new UserDAO(sqliteConnection.connect());
             try {

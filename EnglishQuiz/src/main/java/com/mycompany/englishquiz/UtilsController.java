@@ -53,48 +53,46 @@ public class UtilsController implements Initializable {
     @FXML
     private Label lb_loginMessage;
 
+   
+    
     @FXML
     public void loginButtonOnAction(ActionEvent event) throws SQLException, IOException {
         if (tf_username.getText().isBlank() || tf_password.getText().isBlank()) {
             lb_loginMessage.setText("Please enter both username and password");
         } else {
             // Check if the entered credentials are valid
-            if (checkLogin(tf_username.getText(), tf_password.getText())) {
+            if (checkLogin(tf_username.getText(), new String(tf_password.getText()))) {
                 // Clear the login message label
                 lb_loginMessage.setText("");
+
                 // Redirect to the MainScreen
-                switchScene(event, "MainScreen.fxml", "Main Screen");
+                switchScene(event, "MainScreen.fxml");
             } else {
                 lb_loginMessage.setText("Invalid login credentials");
             }
         }
     }
 
-public boolean checkLogin(String username, String password) throws SQLException {
-    Connection conn = null;
-    try {
-        // Create a new SqliteConnection object
-        SqliteConnection sqliteConnection = new SqliteConnection();
+    public boolean checkLogin(String username, String password) throws SQLException {
+        try (Connection conn = new SqliteConnection().connect()) {
+            UserDAO dao = new UserDAO(conn);
+            System.out.println("Username: " + username);
+            User user = dao.getUserByUsername(username);
+            System.out.println("User: " + user);
 
-        // Connect to the database
-        conn = sqliteConnection.connect();
-
-        UserDAO dao = new UserDAO(conn);
-        System.out.println("Username: " + username);
-        User user = dao.getUserByUsername(username);
-        System.out.println("User: " + user);
-
-        if (user != null && user.getMatKhau().equals(password)) {
-            // Set the UserSession to indicate that the user is logged in
-            UserSession.getInstance().setUser(user);
-            return true;
-        }
-        return false;
-    } finally {
-        try {
-            if (conn != null) {
-                conn.close();
+            if (user != null && user.getMatKhau().equals(password)) {
+                // Set the UserSession to indicate that the user is logged in
+                UserSession.getInstance().setUser(user);
+                System.out.println("User logged in: " + user.getHoTen());
+                if (user.isManager()) {
+                    System.out.println("User is a manager");
+                } else {
+                    System.out.println("User is not a manager");
+                }
+                return true;
             }
+            System.out.println("Invalid login credentials");
+            return false;
         } catch (SQLException e) {
             // Display an error message if there was an error closing the database connection
             Alert alert = new Alert(AlertType.ERROR);
@@ -102,9 +100,9 @@ public boolean checkLogin(String username, String password) throws SQLException 
             alert.setHeaderText("Error closing database connection");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
+            return false;
         }
     }
-}
 
     public void switchToModifyAccount(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("ModifyAccount.fxml"));
@@ -146,27 +144,30 @@ public boolean checkLogin(String username, String password) throws SQLException 
     }
 
     public void logout(ActionEvent event) {
-        System.out.println("Logout button clicked!");
-        System.out.println("Stage: " + stage);
-        Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Logout");
-        alert.setHeaderText("You're about to logout!");
-        alert.setContentText("Do you want to save before exiting?: ");
+        User loggedInUser = UserSession.getInstance().getUser();
+        if (loggedInUser.getType_User() == 1) {
+            // Show confirmation dialog
+            Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Logout");
+            alert.setHeaderText("You're about to logout!");
+            alert.setContentText("Do you want to save before exiting?: ");
 
-        if (alert.showAndWait().get() == ButtonType.OK) {
+            if (alert.showAndWait().get() == ButtonType.OK) {
+                // Save the result
+            }
+        } else {
+            // Switch to login screen
             stage = (Stage) scenePane.getScene().getWindow();
             System.out.println("You successfully logged out!");
             stage.close();
         }
-
     }
 
-    public void switchScene(ActionEvent event, String path, String title) throws IOException {
+    public void switchScene(ActionEvent event, String path) throws IOException {
         root = FXMLLoader.load(getClass().getResource(path));
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle(title); // set the title of the new scene
         stage.show();
     }
 
@@ -204,6 +205,5 @@ public boolean checkLogin(String username, String password) throws SQLException 
             alert.showAndWait();
         }
     }
-    
-    
+
 }
