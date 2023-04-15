@@ -32,4 +32,8 @@ public class Passage {
     public List<Question> getQuestions() {
         return questions;
     }
+    
+    public boolean hasPassage(Question question) {
+    return question.getPassage() != null;
+}
 }
