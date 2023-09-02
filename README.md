@@ -33,7 +33,7 @@ Follow these steps to run the EnglishQuiz application on your system:
 
 ## Challenges and Solutions
 
-During the development, we faced challenges with [mention challenges] but overcame them by [describe solutions].
+During the development, we faced challenges with pusing the data from database and show it to interface but overcame and then fix various bug on main screen.
 
 ## Future Enhancements
 
